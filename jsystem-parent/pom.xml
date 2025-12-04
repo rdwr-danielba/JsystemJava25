@@ -29,11 +29,27 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<assembly.format>dir</assembly.format>
 		<topq.repository.rootUrl>https://maven.top-q.co.il</topq.repository.rootUrl>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
+		<maven.compiler.release>25</maven.compiler.release>
 	</properties>
 
 	<dependencies>
+		<!-- JAXB API -->
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		<!-- JAXB Runtime (implementation) -->
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>4.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.activation</groupId>
+			<artifactId>javax.activation-api</artifactId>
+			<version>1.2.0</version>
+		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -241,6 +257,28 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.12.0</version>
+				<configuration>
+					<release>25</release>jva
+					<fork>true</fork>
+					<annotationProcessorPaths>
+						<path>
+							<groupId>jakarta.xml.bind</groupId>
+							<artifactId>jakarta.xml.bind-api</artifactId>
+							<version>4.0.0</version>
+						</path>
+						<path>
+							<groupId>org.glassfish.jaxb</groupId>
+							<artifactId>jaxb-runtime</artifactId>
+							<version>4.0.0</version>
+						</path>
+					</annotationProcessorPaths>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

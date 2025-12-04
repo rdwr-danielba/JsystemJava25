@@ -88,8 +88,9 @@ public class ScenarioTreeNode implements TreeNode {
 		return (!isJTestContainer() || ScenarioHelpers.isScenarioAsTestAndNotRoot(getTest()));
 	}
 
-	public Enumeration<?> children() {
-		Vector<ScenarioTreeNode> elements = new Vector<ScenarioTreeNode>();
+	@Override
+	public Enumeration<? extends TreeNode> children() {
+		Vector<TreeNode> elements = new Vector<TreeNode>();
 		Vector<JTest> tests = null;
 		if (isJTestContainer()) {
 			tests = ((JTestContainer) getTest()).getRootTests();

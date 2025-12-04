@@ -169,7 +169,9 @@ public class MailUtil extends SystemObjectImpl{
 			props.put("mail.smtp.socketFactory.fallback", "false");
 		}
 
-		Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+		// Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider()); // old, removed
+		// No need to explicitly add SunJSSE provider in modern JDKs
+
 
 		props.put("mail.smtp.host", smtpHostName);
 

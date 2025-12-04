@@ -52,7 +52,7 @@ import org.w3c.dom.NodeList;
  * @author guy.arieli
  * 
  */
-public abstract class AssetNode extends DefaultMutableTreeNode implements Comparable<Object>{
+public abstract class AssetNode extends DefaultMutableTreeNode implements Comparable<AssetNode>{
 
 	/**
 	 * 
@@ -64,6 +64,8 @@ public abstract class AssetNode extends DefaultMutableTreeNode implements Compar
 	protected boolean isSelected;
 
 	private boolean isClassPath;
+
+	protected Vector<AssetNode> children;
 
 	private static Vector<String[]> loadErrors = new Vector<String[]>();
 
@@ -84,11 +86,15 @@ public abstract class AssetNode extends DefaultMutableTreeNode implements Compar
 		setParent(parent);
 
 		isSelected = false;
+
+		if (children == null) {
+			children = new Vector<>();
+		}
 	}
 	public AssetNode(){
 		isSelected = false;
 		if (children == null) {
-			children = new Vector<AssetNode>();
+			children = new Vector<>();
 		}
 	}
 
@@ -96,7 +102,7 @@ public abstract class AssetNode extends DefaultMutableTreeNode implements Compar
 	protected void initChildren(Object[] child) throws Exception {
 
 		if (children == null) {
-			children = new Vector();
+			children = new Vector<>();
 		}
 		for (int i = 0; i < child.length; i++) {
 			if (child[i] instanceof File) {
@@ -245,7 +251,7 @@ public abstract class AssetNode extends DefaultMutableTreeNode implements Compar
 				}
 			}
 		}
-		if("true".equals(JSystemProperties.getInstance().getPreferenceOrDefault(FrameworkOptions.SORT_ASSETS_TREE))){
+		if ("true".equals(JSystemProperties.getInstance().getPreferenceOrDefault(FrameworkOptions.SORT_ASSETS_TREE))) {
 			Collections.sort(children);
 		}
 	}
@@ -259,13 +265,13 @@ public abstract class AssetNode extends DefaultMutableTreeNode implements Compar
 	}
 
 	protected int getTestsCount() {
-		if(children == null){
+		if (children == null) {
 			return 0;
 		}
 		int size = children.size();
 		int count = 0;
 		for (int i = 0; i < size; i++) {
-			count += ((AssetNode) children.elementAt(i)).getTestsCount();
+			count += children.elementAt(i).getTestsCount();
 		}
 		return count;
 	}
@@ -276,14 +282,12 @@ public abstract class AssetNode extends DefaultMutableTreeNode implements Compar
 			return;
 		}
 		Vector<AssetNode> c = (Vector<AssetNode>) children.clone();
-		for (int i = 0; i < c.size(); i++) {
-			AssetNode n = (AssetNode) c.elementAt(i);
+		for (AssetNode n : c) {
 			if (n.getTestsCount() == 0) {
 				children.removeElement(n);
 			}
 		}
-		for (int i = 0; i < children.size(); i++) {
-			AssetNode n = (AssetNode) children.elementAt(i);
+		for (AssetNode n : children) {
 			n.cleanLeafsWithoutTests();
 		}
 	}
@@ -476,10 +480,10 @@ public abstract class AssetNode extends DefaultMutableTreeNode implements Compar
         }
         return root;
     }
-    
+
 	@Override
-	public int compareTo(Object o) {
-		return this.getUserObject().toString().compareTo(((AssetNode)o).getUserObject().toString());
+	public int compareTo(AssetNode o) {
+		return this.getUserObject().toString().compareTo(o.getUserObject().toString());
 	}
 
 }
